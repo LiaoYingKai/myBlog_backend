@@ -6,4 +6,5 @@ module.exports = {
 		database : 'blog',
 	},
 	port: 8000,
+	salt: '!@#$%',
 }
