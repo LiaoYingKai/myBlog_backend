@@ -14,7 +14,7 @@ module.exports = {
 		return connection.query(sql, callback);
 	},
 	create: function(req, callback) {
-		sql = mysql.format('INSERT INTO users SET ?', req.body);
+		sql = mysql.format('INSERT INTO users SET ?', req);
 		return connection.query(sql, callback);
 	}
 }

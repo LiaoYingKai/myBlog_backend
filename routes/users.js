@@ -11,7 +11,6 @@ router
 				return console.error(err);
 			}
 
-			// 沒有找到指定的資源
 			if (!results.length) {
 				res.sendStatus(404);
 				return;
@@ -19,6 +18,25 @@ router
 
 			res.json(results);
 		});
+	})
+
+router
+	.post('/create', function(req, res){
+		const body = req.body
+		users.create(body, function(err, results, fields) {
+			if(err) {
+				if(err.sqlState === '23000') {
+					res.status(403).json({error: 'account already exists'});
+					return console.error(err)
+				}
+				res.sendStatus(500);
+				return console.error(err);
+			}
+
+			// // 新的資源已建立 (回應新增資源的 id)
+			res.status(201).json({message: "create successful"})
+			// res.status(201).json(results);
+		})
 	})
 
 
