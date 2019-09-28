@@ -21,9 +21,28 @@ router
 	})
 
 router
+	.post('/login', function(req, res) {
+		users.login(req, function (err, results, fields) {
+			// TODO login error handle
+			if (err) {
+				res.sendStatus(500);
+				return console.error(err);
+			}
+
+			if (!results.length) {
+				res.sendStatus(404);
+				return;
+			}
+			
+			res.status(200).json(results);
+		});
+	})
+
+router
 	.post('/create', function(req, res){
 		const body = req.body
 		users.create(body, function(err, results, fields) {
+			// TODO login error handle
 			if(err) {
 				if(err.sqlState === '23000') {
 					res.status(403).json({error: 'account already exists'});
