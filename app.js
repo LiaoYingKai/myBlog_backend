@@ -1,11 +1,13 @@
 const bodyparser = require('body-parser')
 const express = require('express')
+const cors = require('cors')
 
 const config = require('./config')
 const userRouter = require('./routes/users')
 const userMiddleware = require('./middleware/users')
 const app = express()
 
+app.use(cors())
 app.use(bodyparser.urlencoded({ extended: false }));
 app.use(bodyparser.json());
 
