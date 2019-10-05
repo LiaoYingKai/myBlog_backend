@@ -1,12 +1,12 @@
 const express = require('express')
-const users = require('../models/users')
+const user = require('../models/user')
 
 const router = express.Router()
 
 router
 	.post('/login', function(req, res) {
 		const body = req.body
-		users.login(body)
+		user.login(body)
 			.then(({status, message}) => {
 				res.status(status).json({
 					message
@@ -22,7 +22,7 @@ router
 router
 	.post('/create', function(req, res){
 		const body = req.body
-		users.create(body)
+		user.create(body)
 			.then(({status, message}) => {
 				res.status(status).json({
 					message
