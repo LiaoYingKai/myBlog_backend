@@ -20,7 +20,7 @@ module.exports = {
 			sql = mysql.format('SELECT * FROM users WHERE account = ? ;', [req.account])
 			db.query(sql, function(err, results, fields){
 				if(err) {
-					console.log(error)
+					console.log(err)
 					result = {
 						status: 500,
 						message: '伺服器錯誤，請稍後在試'
@@ -38,7 +38,7 @@ module.exports = {
 					sql = mysql.format('INSERT INTO users SET ?', req);
 					db.query(sql, function(err, results){
 						if(err) {
-							console.log(error)
+							console.log(err)
 							result = {
 								status: 500,
 								message: '伺服器錯誤，請稍後在試'
