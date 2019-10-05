@@ -5,83 +5,98 @@ const db = mysql.createConnection(config.db)
 let sql = ''
 
 module.exports = {
-	users: function(req, callback) {
-		sql = 'SELECT * FROM users';
-		return db.query(sql, callback);
-	},
 	login: function(req, callback) {
-		const { account, password } = req.body
-		sql = mysql.format('SELECT * FROM users WHERE account = ? AND password = ?', [account, password])
-		return db.query(sql, callback);
+		let { account, password } = req
+		let response = {}
+		return new Promise((resolve, reject) => {
+			sql = mysql.format('SELECT * FROM users WHERE account = ? ;', [account])
+			db.query(sql, function(err, results){
+				if(err) {
+					console.log(err)
+					response = {
+						status: 500,
+						message: '伺服器錯誤，請稍後在試'
+					}
+					reject(response)
+					return
+				}
+				if(results.length === 0) {
+					response = {
+						status: 400,
+						message: '帳號不存在'
+					}
+					reject(response)
+					return
+				} else {
+					sql = mysql.format('SELECT * FROM users WHERE account = ? AND password = ?', [account, password])
+					db.query(sql, function(err, results){
+						if(err) {
+							console.log(err)
+							response = {
+								status: 500,
+								message: '伺服器錯誤，請稍後在試'
+							}
+							reject(response)
+							return
+						}
+						if(results.length === 0) {
+							response = {
+								status: 400,
+								message: '密碼錯誤'
+							}
+							reject(response)
+							return 
+						}
+						response = {
+							status: 200,
+							message: '登入成功'
+						}
+						resolve(response)
+					})
+				}
+			})
+		})
 	},
 	create: function(req, callback) {
-		let result = {};
+		let response = {};
 		return new Promise((resolve, reject) => {
 			sql = mysql.format('SELECT * FROM users WHERE account = ? ;', [req.account])
 			db.query(sql, function(err, results, fields){
 				if(err) {
 					console.log(err)
-					result = {
+					response = {
 						status: 500,
 						message: '伺服器錯誤，請稍後在試'
 					}
-					reject(result)
+					reject(response)
 					return 
 				}
 				if(results.length >= 1) {
-					result = {
+					response = {
 						status: 400,
 						message: '帳號已存在'
 					}
-					reject(result)
+					reject(response)
 				} else {
 					sql = mysql.format('INSERT INTO users SET ?', req);
 					db.query(sql, function(err, results){
 						if(err) {
 							console.log(err)
-							result = {
+							response = {
 								status: 500,
 								message: '伺服器錯誤，請稍後在試'
 							}
-							reject(result)
+							reject(response)
 							return 
 						}
-						result = {
+						response = {
 							status: 200,
 							message: '註冊成功'
 						}
-						resolve(result)
+						resolve(response)
 					})
 				}
 			})
 		})
-		// return db.query(sql, function(err, results, fields){
-		// 	if(err) {
-		// 		return {
-		// 			status: 500,
-		// 			meeage: '伺服器錯誤，請稍後在試'
-		// 		}
-		// 	}
-		// 	if(results.length >= 1) {
-		// 		return {
-		// 			status: 400,
-		// 			message: '帳號已存在'
-		// 		}
-		// 	} else {
-		// 		sql = mysql.format('INSERT INTO users SET ?', req);
-		// 		return db.query(sql, function(err, results, fields){
-		// 			if(err) {
-		// 				return {
-		// 					status: 500,
-		// 					meeage: '伺服器錯誤，請稍後在試'
-		// 				}
-		// 			}
-		// 			return {
-		// 				status: 201,
-		// 				message: '帳號建立成功'
-		// 			}
-		// 		});
-		// 	}
-		// })
 	}
 }
