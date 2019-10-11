@@ -1,5 +1,6 @@
 const mysql = require('mysql')
 const pool = require('../db-pool')
+const { SERVER_ERROR, NO_THIS_ID } = require('../enums/errorEnums')
 
 let sql = ''
 
@@ -14,7 +15,7 @@ module.exports = {
 					console.log(err)
 					response = {
 						status: 500,
-						message: '伺服器錯誤，請稍後在試'
+						message: SERVER_ERROR
 					}
 					reject(response)
 					return
@@ -28,8 +29,35 @@ module.exports = {
 		})
 	},
 	// 取得文章內容
-	getArticle: function() {
-
+	getArticle: function(id, callback) {
+		return new Promise((resolve, reject) => {
+			sql = mysql.format('SELECT * FROM articles where article_id= ?', id)
+			pool.query(sql, function(err, results) {
+				let response;
+				if(err) {
+					console.log(err)
+					response = {
+						status: 500,
+						message: SERVER_ERROR
+					}
+					reject(response)
+					return
+				}
+				if(results.length === 0) {
+					response = {
+						status: 400,
+						message: NO_THIS_ID
+					}
+					reject(response)
+					return 
+				}
+				response = {
+					status: 200,
+					response: results[0],
+				}
+				resolve(response)
+			})
+		})
 	},
 	// 取得熱門文章
 	getTopArticle: function() {
