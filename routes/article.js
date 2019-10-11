@@ -1,55 +1,23 @@
 const express = require('express')
 const article = require('../models/article')
-
+const { responseFormat } = require('./lib')
+const { getArticleList, getTopArticle, getArticle } = article;
 const router = express.Router()
 
 router
 	.get('/list', function(req, res) {
-		article.getArticleList()
-			.then(({status, response}) => {
-				res.status(status).json({
-					response
-				})
-			})
-			.catch(({status, message}) => {
-				res.status(status).json({
-					message
-				})
-			})
+		responseFormat(getArticleList(), res)
 	})
 
 router
 	.get('/hot', function(req, res) {
-		article.getTopArticle()
-			.then(({status, response}) => {
-				console.log(response)
-				res.status(status).json({
-					response
-				})
-			})
-			.catch(({status, message}) => {
-				res.status(status).json({
-					message
-				})
-			})
+		responseFormat(getTopArticle(), res)
 	})
 
 router
 	.get('/:id', function(req, res) {
 		const id = req.params.id
-		article.getArticle(id)
-			.then(({status, response}) => {
-				res.status(status).json({
-					response
-				})
-			})
-			.catch(({status, message}) => {
-				res.status(status).json({
-					message
-				})
-			})
+		responseFormat(getArticle(id), res)
 	})
-
-
 
 module.exports = router

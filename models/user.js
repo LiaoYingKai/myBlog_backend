@@ -48,7 +48,7 @@ module.exports = {
 						}
 						response = {
 							status: 200,
-							message: '登入成功'
+							response: '登入成功'
 						}
 						resolve(response)
 					})
@@ -60,7 +60,7 @@ module.exports = {
 		let response = {};
 		return new Promise((resolve, reject) => {
 			sql = mysql.format('SELECT * FROM users WHERE account = ? ;', [req.account])
-			dbquery(sql, function(err, results, fields){
+			pool.query(sql, function(err, results, fields){
 				if(err) {
 					console.log(err)
 					response = {
@@ -76,6 +76,7 @@ module.exports = {
 						message: '帳號已存在'
 					}
 					reject(response)
+					return
 				} else {
 					sql = mysql.format('INSERT INTO users SET ?', req);
 					pool.query(sql, function(err, results){
@@ -90,7 +91,7 @@ module.exports = {
 						}
 						response = {
 							status: 200,
-							message: '註冊成功'
+							response: '註冊成功'
 						}
 						resolve(response)
 					})
