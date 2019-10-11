@@ -19,9 +19,8 @@ router
 	})
 
 router
-	.get('/:id', function(req, res) {
-		const id = req.params.id
-		article.getArticle(id)
+	.get('/hot', function(req, res) {
+		article.getTopArticle()
 			.then(({status, response}) => {
 				console.log(response)
 				res.status(status).json({
@@ -34,22 +33,22 @@ router
 				})
 			})
 	})
-// router
-// 	.get('/topArticle', function(req, res) {
-// 		console.log(req)
-// 		article.getArticle()
-// 			.then(({status, response}) => {
-// 				console.log(response)
-// 				res.status(status).json({
-// 					response
-// 				})
-// 			})
-// 			.catch(({status, message}) => {
-// 				res.status(status).json({
-// 					message
-// 				})
-// 			})
-// 	})
+
+router
+	.get('/:id', function(req, res) {
+		const id = req.params.id
+		article.getArticle(id)
+			.then(({status, response}) => {
+				res.status(status).json({
+					response
+				})
+			})
+			.catch(({status, message}) => {
+				res.status(status).json({
+					message
+				})
+			})
+	})
 
 
 

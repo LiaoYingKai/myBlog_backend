@@ -5,10 +5,10 @@ const { SERVER_ERROR, NO_THIS_ID } = require('../enums/errorEnums')
 let sql = ''
 
 module.exports = {
-	// 取得文章列表
+	// 取得文章列表(預設排列由新到舊)
 	getArticleList: function(req, callback) {
 		return new Promise((resolve, reject) => {
-			sql = mysql.format('SELECT article_id,title,author FROM articles')
+			sql = mysql.format('SELECT article_id,title,author FROM articles order by created desc')
 			pool.query(sql, function(err, results) {
 				let response;
 				if(err) {
@@ -70,9 +70,28 @@ module.exports = {
 			})
 		})
 	},
-	// 取得熱門文章
-	getTopArticle: function() {
-
+	// 取得熱門文章(預設取前 10 筆)
+	getTopArticle: function(req, callback) {
+		return new Promise((resolve, reject) => {
+			sql = mysql.format('select article_id,title,author,view_count from articles order by view_count desc LIMIT 10')
+			pool.query(sql, function(err, results) {
+				let response;
+				if(err) {
+					console.log(err)
+					response = {
+						status: 500,
+						message: SERVER_ERROR
+					}
+					reject(response)
+					return
+				}
+				response = {
+					status: 200,
+					response: results,
+				}
+				resolve(response)
+			})
+		})
 	},
 	createArticle: function() {
 
