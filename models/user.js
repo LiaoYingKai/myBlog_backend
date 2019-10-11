@@ -1,22 +1,20 @@
 const mysql = require('mysql')
 const pool = require('../db-pool')
 const { SERVER_ERROR } = require('../enums/errorEnums')
+const { serverError } = require('./lib.js')
+
 let sql = ''
+let response = {}
 
 module.exports = {
 	login: function(req, callback) {
 		let { account, password } = req
-		let response = {}
 		return new Promise((resolve, reject) => {
 			sql = mysql.format('SELECT * FROM users WHERE account = ? ;', [account])
 			pool.query(sql, function(err, results){
 				if(err) {
 					console.log(err)
-					response = {
-						status: 500,
-						message: SERVER_ERROR
-					}
-					reject(response)
+					reject(serverError)
 					return
 				}
 				if(results.length === 0) {
@@ -31,11 +29,7 @@ module.exports = {
 					pool.query(sql, function(err, results){
 						if(err) {
 							console.log(err)
-							response = {
-								status: 500,
-								message: SERVER_ERROR
-							}
-							reject(response)
+							reject(serverError)
 							return
 						}
 						if(results.length === 0) {
@@ -57,18 +51,13 @@ module.exports = {
 		})
 	},
 	create: function(req, callback) {
-		let response = {};
 		return new Promise((resolve, reject) => {
 			sql = mysql.format('SELECT * FROM users WHERE account = ? ;', [req.account])
 			pool.query(sql, function(err, results, fields){
 				if(err) {
 					console.log(err)
-					response = {
-						status: 500,
-						message: SERVER_ERROR
-					}
-					reject(response)
-					return 
+					reject(serverError)
+					return
 				}
 				if(results.length >= 1) {
 					response = {
@@ -82,12 +71,8 @@ module.exports = {
 					pool.query(sql, function(err, results){
 						if(err) {
 							console.log(err)
-							response = {
-								status: 500,
-								message: SERVER_ERROR
-							}
-							reject(response)
-							return 
+							reject(serverError)
+							return
 						}
 						response = {
 							status: 200,

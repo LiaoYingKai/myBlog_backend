@@ -1,8 +1,10 @@
 const mysql = require('mysql')
 const pool = require('../db-pool')
-const { SERVER_ERROR, NO_THIS_ID } = require('../enums/errorEnums')
+const { NO_THIS_ID } = require('../enums/errorEnums')
+const { serverError } = require('./lib.js')
 
 let sql = ''
+let response = {}
 
 module.exports = {
 	// 取得文章列表(預設排列由新到舊)
@@ -10,14 +12,9 @@ module.exports = {
 		return new Promise((resolve, reject) => {
 			sql = mysql.format('SELECT article_id,title,author FROM articles order by created desc')
 			pool.query(sql, function(err, results) {
-				let response;
 				if(err) {
 					console.log(err)
-					response = {
-						status: 500,
-						message: SERVER_ERROR
-					}
-					reject(response)
+					reject(serverError)
 					return
 				}
 				response = {
@@ -33,14 +30,9 @@ module.exports = {
 		return new Promise((resolve, reject) => {
 			sql = mysql.format('SELECT * FROM articles where article_id= ?', id)
 			pool.query(sql, function(err, results) {
-				let response;
 				if(err) {
 					console.log(err)
-					response = {
-						status: 500,
-						message: SERVER_ERROR
-					}
-					reject(response)
+					reject(serverError)
 					return
 				}
 				if(results.length === 0) {
@@ -54,11 +46,8 @@ module.exports = {
 				sql = mysql.format('update articles set view_count=view_count+1 where article_id=?', id)
 				pool.query(sql, function(err, results) {
 					if(err) {
-						response = {
-							status: 500,
-							message: SERVER_ERROR
-						}
-						reject(response)
+						console.log(err)
+						reject(serverError)
 						return
 					}
 				})
@@ -75,14 +64,9 @@ module.exports = {
 		return new Promise((resolve, reject) => {
 			sql = mysql.format('select article_id,title,author,view_count from articles order by view_count desc LIMIT 10')
 			pool.query(sql, function(err, results) {
-				let response;
 				if(err) {
 					console.log(err)
-					response = {
-						status: 500,
-						message: SERVER_ERROR
-					}
-					reject(response)
+					reject(serverError)
 					return
 				}
 				response = {
