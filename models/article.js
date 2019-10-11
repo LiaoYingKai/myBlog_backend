@@ -51,6 +51,17 @@ module.exports = {
 					reject(response)
 					return 
 				}
+				sql = mysql.format('update articles set view_count=view_count+1 where article_id=?', id)
+				pool.query(sql, function(err, results) {
+					if(err) {
+						response = {
+							status: 500,
+							message: SERVER_ERROR
+						}
+						reject(response)
+						return
+					}
+				})
 				response = {
 					status: 200,
 					response: results[0],
