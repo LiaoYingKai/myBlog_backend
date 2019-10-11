@@ -1,6 +1,6 @@
 const mysql = require('mysql')
 const pool = require('../db-pool')
-
+const { SERVER_ERROR } = require('../enums/errorEnums')
 let sql = ''
 
 module.exports = {
@@ -14,7 +14,7 @@ module.exports = {
 					console.log(err)
 					response = {
 						status: 500,
-						message: '伺服器錯誤，請稍後在試'
+						message: SERVER_ERROR
 					}
 					reject(response)
 					return
@@ -33,7 +33,7 @@ module.exports = {
 							console.log(err)
 							response = {
 								status: 500,
-								message: '伺服器錯誤，請稍後在試'
+								message: SERVER_ERROR
 							}
 							reject(response)
 							return
@@ -65,7 +65,7 @@ module.exports = {
 					console.log(err)
 					response = {
 						status: 500,
-						message: '伺服器錯誤，請稍後在試'
+						message: SERVER_ERROR
 					}
 					reject(response)
 					return 
@@ -83,7 +83,7 @@ module.exports = {
 							console.log(err)
 							response = {
 								status: 500,
-								message: '伺服器錯誤，請稍後在試'
+								message: SERVER_ERROR
 							}
 							reject(response)
 							return 
