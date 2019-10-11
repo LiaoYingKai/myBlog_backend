@@ -1,7 +1,6 @@
 const mysql = require('mysql')
-const config = require('../config')
+const pool = require('../db-pool')
 
-const db = mysql.createConnection(config.db)
 let sql = ''
 
 module.exports = {
@@ -10,7 +9,7 @@ module.exports = {
 		let response = {}
 		return new Promise((resolve, reject) => {
 			sql = mysql.format('SELECT * FROM users WHERE account = ? ;', [account])
-			db.query(sql, function(err, results){
+			pool.query(sql, function(err, results){
 				if(err) {
 					console.log(err)
 					response = {
@@ -29,7 +28,7 @@ module.exports = {
 					return
 				} else {
 					sql = mysql.format('SELECT * FROM users WHERE account = ? AND password = ?', [account, password])
-					db.query(sql, function(err, results){
+					pool.query(sql, function(err, results){
 						if(err) {
 							console.log(err)
 							response = {
@@ -61,7 +60,7 @@ module.exports = {
 		let response = {};
 		return new Promise((resolve, reject) => {
 			sql = mysql.format('SELECT * FROM users WHERE account = ? ;', [req.account])
-			db.query(sql, function(err, results, fields){
+			dbquery(sql, function(err, results, fields){
 				if(err) {
 					console.log(err)
 					response = {
@@ -79,7 +78,7 @@ module.exports = {
 					reject(response)
 				} else {
 					sql = mysql.format('INSERT INTO users SET ?', req);
-					db.query(sql, function(err, results){
+					pool.query(sql, function(err, results){
 						if(err) {
 							console.log(err)
 							response = {
