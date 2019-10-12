@@ -6,6 +6,7 @@ const {
 	getTopArticle,
 	getArticle,
 	createArticle,
+	updateArticle,
 	deleteArticle,
 } = article;
 const router = express.Router()
@@ -21,15 +22,21 @@ router
 	})
 
 router
-	.get('/:id', function(req, res) {
-		const id = req.params.id
-		responseFormat(getArticle(id), res)
+	.get('/:article_id', function(req, res) {
+		const article_id = req.params.article_id
+		responseFormat(getArticle(article_id), res)
 	})
 
 router
 	.post('/create' ,function(req, res) {
 		const body = req.body
 		responseFormat(createArticle(body), res)
+	})
+
+router
+	.put('/modify' , function(req, res) {
+		const body = req.body
+		responseFormat(updateArticle(body), res)
 	})
 
 router

@@ -6,6 +6,7 @@ const { serverError } = require('./lib.js')
 let sql = ''
 let response = {}
 
+
 module.exports = {
 	// 取得文章列表(預設排列由新到舊)
 	getArticleList: function(req, callback) {
@@ -94,8 +95,35 @@ module.exports = {
 			})
 		})
 	},
-	updateArticle: function() {
-
+	updateArticle: function(req, callback) {
+		const { article_id } = req
+		return new Promise((resolve, reject) => {
+			sql = mysql.format('SELECT * from articles where article_id = ?' ,article_id)
+			pool.query(sql, function(err, results) {
+				if(err) {
+					console.log(err)
+					reject(serverError)
+					return 
+				}
+				if(results.length === 0) {
+					response = {
+						status: 400,
+						message: NO_THIS_ID,
+					}
+					reject(response)
+					return 
+				}
+				sql = mysql.format('UPDATE articles set ? where article_id = ?', [req, article_id])
+				pool.query(sql, function(err, results) {
+					if(err) {
+						console.log(err)
+						reject(serverError)
+						return 
+					}
+					resolve(getArticle(article_id))
+				})
+			})
+		})
 	},
 	deleteArticle: function(article_id, callback) {
 		return new Promise((resolve, reject) => {
@@ -132,3 +160,7 @@ module.exports = {
 		})
 	},
 }
+
+const {
+	getArticle
+} = module.exports
