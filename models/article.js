@@ -77,8 +77,22 @@ module.exports = {
 			})
 		})
 	},
-	createArticle: function() {
-
+	createArticle: function(req, callback) {
+		return new Promise((resolve, reject) => {
+			sql = mysql.format('INSERT INTO articles SET ?', req)
+			pool.query(sql, function(err, results) {
+				if(err) {
+					console.log(err)
+					reject(serverError)
+					return 
+				}
+				response = {
+					status: 200,
+					response: '建立成功'
+				}
+				resolve(response)
+			})
+		})
 	},
 	updateArticle: function() {
 
