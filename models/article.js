@@ -97,7 +97,38 @@ module.exports = {
 	updateArticle: function() {
 
 	},
-	deleteArticle: function() {
-
+	deleteArticle: function(article_id, callback) {
+		return new Promise((resolve, reject) => {
+			sql = mysql.format('SELECT * from articles where article_id = ?' ,article_id)
+			pool.query(sql, function(err, results) {
+				if(err) {
+					console.log(err)
+					reject(serverError)
+					return 
+				}
+				if(results.length === 0) {
+					response = {
+						status: 400,
+						message: NO_THIS_ID,
+					}
+					reject(response)
+					return 
+				}
+				sql = mysql.format('DELETE FROM articles where article_id = ?', article_id)
+				pool.query(sql, function(err, results) {
+					if(err) {
+						console.log(err)
+						reject(serverError)
+						return 
+					}
+					response = {
+						status: 200,
+						response: '刪除成功'
+					}
+					resolve(response)
+				})
+			})
+			
+		})
 	},
 }

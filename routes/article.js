@@ -1,7 +1,13 @@
 const express = require('express')
 const article = require('../models/article')
 const { responseFormat } = require('./lib')
-const { getArticleList, getTopArticle, getArticle, createArticle } = article;
+const { 
+	getArticleList,
+	getTopArticle,
+	getArticle,
+	createArticle,
+	deleteArticle,
+} = article;
 const router = express.Router()
 
 router
@@ -24,6 +30,12 @@ router
 	.post('/create' ,function(req, res) {
 		const body = req.body
 		responseFormat(createArticle(body), res)
+	})
+
+router
+	.delete('/delete' , function(req, res) {
+		const { article_id } = req.body
+		responseFormat(deleteArticle(article_id), res)
 	})
 
 module.exports = router
