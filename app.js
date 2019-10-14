@@ -16,6 +16,7 @@ app.use(bodyparser.json());
 app.use('/user', [auth.ACCOUNT_AUTH, auth.PASSWORD_AUTH], globalMiddleware.verification)
 app.use('/user', userMiddleware.passwdCrypto , userRouter);
 
+app.use(globalMiddleware.hasToken)
 app.use('/article', articleRouter);
 
 app.listen(config.port, function () {

@@ -23,8 +23,9 @@ class Jwt {
 		const cert = fs.readFileSync(path.join(__dirname, './key/rsa_public_key.pem'));
 		let res;
 		try {
-			let result = jwt.verify(token, cert, {algorithms: ['RS256']}) || {};
-			let {exp = 0} = result, current = Math.floor(Date.now() / 1000);
+			const result = jwt.verify(token, cert, {algorithms: ['RS256']}) || {};
+			const {exp = 0} = result
+			const current = Math.floor(Date.now() / 1000);
 			if (current <= exp) {
 				res = result.data || {};
 			}
