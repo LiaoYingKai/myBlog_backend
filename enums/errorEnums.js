@@ -1,6 +1,6 @@
 const SERVER_ERROR = '伺服器錯誤，請稍後在試'
 const NO_THIS_ID = '查無此 ID'
-const TOKEN_ERROR = '未攜帶 token 或是 token 過期'
+const TOKEN_ERROR = '未攜帶 Token 或是 Token 過期'
 
 const ACCOUNT_TOO_SHORT = '帳號至少 4 個字'
 const ACCOUNT_TOO_LONG = '帳號不能超過 16 個字'
