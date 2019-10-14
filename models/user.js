@@ -1,6 +1,6 @@
 const mysql = require('mysql')
+const jwtUtil = require('../jwt')
 const pool = require('../db-pool')
-const { SERVER_ERROR } = require('../enums/errorEnums')
 const { serverError } = require('./lib.js')
 
 let sql = ''
@@ -40,9 +40,14 @@ module.exports = {
 							reject(response)
 							return 
 						}
+						const jwt = new jwtUtil(account)
+						const token = jwt.generateToken()
 						response = {
 							status: 200,
-							response: '登入成功'
+							response: {
+								message: '登入成功',
+								token,
+							}
 						}
 						resolve(response)
 					})

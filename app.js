@@ -1,7 +1,6 @@
 const bodyparser = require('body-parser')
 const express = require('express')
 const cors = require('cors')
-
 const auth = require('./lib/verification')
 const config = require('./config')
 const userRouter = require('./routes/user')
