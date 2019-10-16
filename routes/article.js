@@ -10,6 +10,7 @@ const {
 	deleteArticle,
 } = article;
 const router = express.Router()
+const { tokenVerify } = require('../middleware/global')
 
 router
 	.get('/list', function(req, res) {
@@ -28,19 +29,19 @@ router
 	})
 
 router
-	.post('/create' ,function(req, res) {
+	.post('/create', tokenVerify, function(req, res) {
 		const body = req.body
 		responseFormat(createArticle(body), res)
 	})
 
 router
-	.put('/modify' , function(req, res) {
+	.put('/modify', tokenVerify, function(req, res) {
 		const body = req.body
 		responseFormat(updateArticle(body), res)
 	})
 
 router
-	.delete('/delete' , function(req, res) {
+	.delete('/delete', tokenVerify, function(req, res) {
 		const { article_id } = req.body
 		responseFormat(deleteArticle(article_id), res)
 	})

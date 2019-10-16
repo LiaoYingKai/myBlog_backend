@@ -5,7 +5,7 @@ const auth = require('./lib/verification')
 const config = require('./config')
 const userRouter = require('./routes/user')
 const articleRouter = require('./routes/article')
-const { accountPasswordVerify, tokenVerify } = require('./middleware/global')
+const { accountPasswordVerify } = require('./middleware/global')
 
 const userMiddleware = require('./middleware/user')
 const app = express()
@@ -17,7 +17,6 @@ app.use(bodyparser.json());
 app.use('/user', [auth.ACCOUNT_AUTH, auth.PASSWORD_AUTH], accountPasswordVerify)
 app.use('/user', userMiddleware.passwdCrypto , userRouter);
 
-app.use(tokenVerify)
 app.use('/article', articleRouter);
 
 app.listen(config.port, function () {
