@@ -40,6 +40,10 @@ module.exports = {
 							reject(response)
 							return 
 						}
+						const userData = {
+							account: results[0].account,
+							user_name: results[0].user_name
+						}
 						const jwt = new jwtUtil(account)
 						const token = jwt.generateToken()
 						response = {
@@ -47,6 +51,7 @@ module.exports = {
 							response: {
 								message: '登入成功',
 								token,
+								userData,
 							}
 						}
 						resolve(response)
