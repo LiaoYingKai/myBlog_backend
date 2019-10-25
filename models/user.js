@@ -1,5 +1,5 @@
 const mysql = require('mysql')
-const jwtUtil = require('../jwt')
+const { generateToken } = require('../lib/jwt')
 const pool = require('../db-pool')
 const { serverError } = require('./lib.js')
 
@@ -44,8 +44,7 @@ module.exports = {
 							account: results[0].account,
 							user_name: results[0].user_name
 						}
-						const jwt = new jwtUtil(account)
-						const token = jwt.generateToken()
+						const token = generateToken(account)
 						response = {
 							status: 200,
 							response: {
